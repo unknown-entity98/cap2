@@ -3,7 +3,6 @@ pipeline {
 
     environment {
         IMAGE_NAME = "blackadam60091/webapp"
-        CONTAINER_NAME = "webapp-container"
     }
 
     stages {
@@ -32,6 +31,15 @@ pipeline {
                     docker push $IMAGE_NAME:latest
                     '''
                 }
+            }
+        }
+
+        stage('Deploy to Kubernetes') {
+            steps {
+                sh '''
+                kubectl apply -f deployment.yaml
+                kubectl apply -f service.yaml
+                '''
             }
         }
     }
